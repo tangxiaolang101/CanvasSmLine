@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+ <html xmlns="http://www.w3.start/1999/xhtml">
+ <head>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+     <title></title>
+     <style>
+         canvas{
+             background-color: powderblue;
+         }
+     </style>
+ </head>
+ <body>
+     <!--创建300x300的画布-->
+     <canvas id="canvas" width="300" height="300"></canvas>
+     <script type="text/javascript">
+         var canvas = document.getElementById("canvas");
+         var ctx = canvas.getContext("2d");
+         var start = {x: 0, y:150};
+         var end = {x: 300, y: 150};
+         var nowxy = {x: 0, y: 0};       
+        function init() {
+             ctx.beginPath();
+             ctx.moveTo(start.x, start.y);
+             ctx.lineTo(end.x, end.y);
+             ctx.stroke();
+             math();
+         } 
+         var i = 1;
+         function math() {
+             var wid = Math.abs(end.x - start.x);//x轴的长，绝对值
+             var hei = Math.abs(end.y - start.y);//y轴长
+             var length = Math.pow(Math.pow(wid, 2) + Math.pow(hei, 2), 1 / 2);//（长平方＋宽平方）开根 ，其实就是直角三角关系
+             if (i < length) {//通过SetInterval，按照Length方向每次运行1px
+                 if (start.x < end.x) {
+                     nowxy.x = start.x +wid / length * i;
+                 }
+                 else {
+                     nowxy.x = start.x - wid / length * i;
+                 }
+                 if (start.y < end.y) {
+                     nowxy.y = start.y + hei / length * i;
+                }
+                 else {
+                     nowxy.y = start.y - hei / length * i;
+                 }
+                 i++;
+             }
+            drawcircle();
+        }
+         function drawcircle() {
+             ctx.beginPath();
+             ctx.arc(nowxy.x, nowxy.y, 3, 0, Math.PI * 2, true);
+             ctx.stroke(); 
+         }
+         function clean() {
+             ctx.clearRect(0, 0, canvas.width, canvas.height);
+         }
+         setInterval(function () {
+             clean();
+             init();
+         }, 10);       
+     </script> 
+ </body>
+ </html>
